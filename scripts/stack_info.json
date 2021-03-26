@@ -4,7 +4,7 @@
     "deployment_id" : "${deployment_id}",
     "subnet_id" : "${priv_subnet_id}",
     "load_balancer_id" : "${load_balancer_id}",
-    "sp3_url" : "${sp3_url}",
+    "Fn4_url" : "${Fn4_url}",
     "availability_domain" : "${ad}",
     "worker_node" : {
         "worker_shape" : "${worker_shape}",    

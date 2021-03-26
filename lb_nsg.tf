@@ -3,9 +3,9 @@
 # Allow port 80 and 443 in to the load balancer
 
 resource "oci_core_network_security_group" "lb_nsg" {
-  display_name   = "${local.Sp3_env_name}-lb-nsg"
-  vcn_id         = local.Sp3_vcn_id
-  compartment_id = local.Sp3_cid
+  display_name   = "${local.Fn4_env_name}-lb-nsg"
+  vcn_id         = local.Fn4_vcn_id
+  compartment_id = local.Fn4_cid
 }
 
 locals {

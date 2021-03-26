@@ -3,9 +3,9 @@
 # Allows Public and Private Network to mount NFS shares from Head Node and access port 80
 
 resource "oci_core_network_security_group" "headnode_nsg" {
-  display_name   = "${local.Sp3_env_name}-hn-nsg"
-  vcn_id         = local.Sp3_vcn_id
-  compartment_id = local.Sp3_cid
+  display_name   = "${local.Fn4_env_name}-hn-nsg"
+  vcn_id         = local.Fn4_vcn_id
+  compartment_id = local.Fn4_cid
 }
 
 locals {

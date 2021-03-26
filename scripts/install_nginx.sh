@@ -10,32 +10,32 @@ fi
 
 # sudo apt install nginx -y
 
-# sudo mkdir -p /var/www/oci.sp3dev.ml/html
-# sudo chown -R ubuntu:ubuntu /var/www/oci.sp3dev.ml/html
-# sudo chmod 755 /var/www/oci.sp3dev.ml/html
+# sudo mkdir -p /var/www/oci.fn4dev.ml/html
+# sudo chown -R ubuntu:ubuntu /var/www/oci.fn4dev.ml/html
+# sudo chmod 755 /var/www/oci.fn4dev.ml/html
 
-# cat << EOF | sudo tee -a /var/www/oci.sp3dev.ml/html/index.html
+# cat << EOF | sudo tee -a /var/www/oci.fn4dev.ml/html/index.html
 # <html>
 #     <head>
-#         <title>Welcome to ${Sp3_env_name}.oci.sp3dev.ml!</title>
+#         <title>Welcome to ${Fn4_env_name}.oci.fn4dev.ml!</title>
 #     </head>
 #     <body>
-#         <h1>Success!  The ${Sp3_env_name}.oci.sp3dev.ml server block is working!</h1>
+#         <h1>Success!  The ${Fn4_env_name}.oci.fn4dev.ml server block is working!</h1>
 #     </body>
 # </html>
 # EOF
 
-# cat << EOF | sudo tee -a /etc/nginx/sites-available/oci.sp3dev.ml
+# cat << EOF | sudo tee -a /etc/nginx/sites-available/oci.fn4dev.ml
 # server {
 #   listen 443 ssl;
-#   server_name *.oci.sp3dev.ml;
+#   server_name *.oci.fn4dev.ml;
 
-#   ssl_certificate /etc/letsencrypt/live/oci.sp3dev.ml/fullchain.pem;
-#   ssl_certificate_key /etc/letsencrypt/live/oci.sp3dev.ml/privkey.pem;
+#   ssl_certificate /etc/letsencrypt/live/oci.fn4dev.ml/fullchain.pem;
+#   ssl_certificate_key /etc/letsencrypt/live/oci.fn4dev.ml/privkey.pem;
 #   include /etc/letsencrypt/options-ssl-nginx.conf;
 #   ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-#   root /var/www/oci.sp3dev.ml/html;
+#   root /var/www/oci.fn4dev.ml/html;
 #   index index.html;
 #   location / {
 #     try_files \$uri \$uri/ =404;
@@ -43,11 +43,11 @@ fi
 # }
 # EOF
 
-# sudo ln -s /etc/nginx/sites-available/oci.sp3dev.ml /etc/nginx/sites-enabled/
+# sudo ln -s /etc/nginx/sites-available/oci.fn4dev.ml /etc/nginx/sites-enabled/
 
 # Let's encrypt
 
-sudo mkdir -p /etc/letsencrypt/live/oci.sp3dev.ml
+sudo mkdir -p /etc/letsencrypt/live/oci.fn4dev.ml
 
 cat << EOF | sudo tee -a /etc/letsencrypt/options-ssl-nginx.conf
 # This file contains important security parameters. If you modify this file
@@ -76,25 +76,25 @@ ssbzSibBsu/6iGtCOGEoXJf//////////wIBAg==
 -----END DH PARAMETERS-----
 EOF
 
-# Pull the Let's Encrypt certificates for *.oci.sp3dev.ml from Vault
+# Pull the Let's Encrypt certificates for *.oci.fn4dev.ml from Vault
 
 oci secrets secret-bundle get \
  --raw-output \
  --auth instance_principal \
- --secret-id ${Sp3dev_ml_ssl_secret_id} \
+ --secret-id ${Fn4dev_ml_ssl_secret_id} \
  --query "data.\"secret-bundle-content\".content" | base64 --decode > /home/ubuntu/.ssh/letsencrypt_fullchain.pem
 
 oci secrets secret-bundle get \
  --raw-output \
  --auth instance_principal \
- --secret-id ${Sp3dev_ml_priv_secret_id} \
+ --secret-id ${Fn4dev_ml_priv_secret_id} \
  --query "data.\"secret-bundle-content\".content" | base64 --decode > /home/ubuntu/.ssh/letsencrypt_privkey.pem
 
 # Put Let's Encrypt certs in place
-sudo cp /home/ubuntu/.ssh/letsencrypt_*.pem /etc/letsencrypt/live/oci.sp3dev.ml/
-sudo chown root:root /etc/letsencrypt/live/oci.sp3dev.ml/*
-sudo chmod 644 /etc/letsencrypt/live/oci.sp3dev.ml/*
-sudo mv /etc/letsencrypt/live/oci.sp3dev.ml/letsencrypt_fullchain.pem /etc/letsencrypt/live/oci.sp3dev.ml/fullchain.pem
-sudo mv /etc/letsencrypt/live/oci.sp3dev.ml/letsencrypt_privkey.pem /etc/letsencrypt/live/oci.sp3dev.ml/privkey.pem
+sudo cp /home/ubuntu/.ssh/letsencrypt_*.pem /etc/letsencrypt/live/oci.fn4dev.ml/
+sudo chown root:root /etc/letsencrypt/live/oci.fn4dev.ml/*
+sudo chmod 644 /etc/letsencrypt/live/oci.fn4dev.ml/*
+sudo mv /etc/letsencrypt/live/oci.fn4dev.ml/letsencrypt_fullchain.pem /etc/letsencrypt/live/oci.fn4dev.ml/fullchain.pem
+sudo mv /etc/letsencrypt/live/oci.fn4dev.ml/letsencrypt_privkey.pem /etc/letsencrypt/live/oci.fn4dev.ml/privkey.pem
 
 # sudo systemctl restart nginx.service

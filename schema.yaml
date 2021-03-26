@@ -1,6 +1,6 @@
 ---
-title: SP3 Build on OCI
-description: Deployment of base SP3 cluster on OCI
+title: Fn4 Build on OCI
+description: Deployment of base Fn4 on OCI
 schemaVersion: 1.1.0
 version: "20210315"
 logoUrl: >
@@ -243,9 +243,9 @@ variables:
   env_name:
     type: string
     title: "Environment Name"
-    description: "Name for the environment - e.g. sp3 - lower case and digits only - must start with lower case letter"
+    description: "Name for the environment - e.g. fn4 - lower case and digits only - must start with lower case letter"
     pattern: "^[a-z][a-z0-9]+$"
-    default: "sp3"
+    default: "fn4"
     required: true
   specify_prefix:
     title: "Would you like to specify a prefix for the deployment?"
@@ -280,11 +280,11 @@ variables:
     type: boolean
     default: true
   install_certs:
-    title: "Install sp3dev.ml certificates?"
+    title: "Install fn4dev.ml certificates?"
     type: boolean
     default: true
   create_dns:
-    title: "Create DNS record in oci.sp3dev.ml?"
+    title: "Create DNS record in oci.fn4dev.ml?"
     type: boolean
     default: true
   show_testing_others:
@@ -300,21 +300,21 @@ variables:
   deploy_test:
     visible: false
 outputs:
-  sp3_bastion:
+  Fn4_bastion:
     title: "Bastion DNS / Public IP Address"
     type: copyableString
     visible: true
-  sp3headnodePrivateIP:
+  Fn4headnodePrivateIP:
     title: "Head Node Private IP Address"
     type: copyableString
     visible: true
-  sp3_loadbalancer_public_ip:
+  Fn4_loadbalancer_public_ip:
     visible: false
-  sp3_deploy_id:
+  Fn4_deploy_id:
     title: "Deployment ID"
     type: string
     visible: true
-  sp3_loadbalancer_url:
+  Fn4_loadbalancer_url:
     title: "Load Balancer URL"
     type: link
     visible: true

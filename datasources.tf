@@ -23,7 +23,7 @@ data "template_file" "headnode_cloud_init" {
     bootstrap_root_sh_content   = base64gzip(data.template_file.bootstrap_root.rendered)
     bootstrap_ubuntu_sh_content = base64gzip(data.template_file.bootstrap_ubuntu.rendered)
     stack_info_content          = base64gzip(data.template_file.stack_info.rendered)
-    install_sp3_sh_content      = base64gzip(data.template_file.install_sp3.rendered)
+    install_Fn4_sh_content      = base64gzip(data.template_file.install_Fn4.rendered)
     inject_pub_keys_sh_content  = base64gzip(data.template_file.inject_pub_keys.rendered)
     install_nginx_sh_content    = base64gzip(data.template_file.install_nginx.rendered)
   }
@@ -55,7 +55,7 @@ data "template_file" "bootstrap_ubuntu" {
 
   # Variables parsed into bootstrap_ubuntu.sh as it is encoded in to Cloud-Init
   vars = {
-    deployment_id = local.Sp3_deploy_id
+    deployment_id = local.Fn4_deploy_id
     tenancy_id    = var.tenancy_ocid
   }
 }
@@ -65,13 +65,13 @@ data "template_file" "stack_info" {
 
   # Variables parsed into stack_info.json as it is encoded in to Cloud-Init
   vars = {
-    deployment_id      = local.Sp3_deploy_id
-    compartment_id     = local.Sp3_cid
+    deployment_id      = local.Fn4_deploy_id
+    compartment_id     = local.Fn4_cid
     tenancy_id         = var.tenancy_ocid
-    load_balancer_id   = local.Sp3_lb_id
-    sp3_url            = local.Sp3_lb_url
+    load_balancer_id   = local.Fn4_lb_id
+    Fn4_url            = local.Fn4_lb_url
     priv_subnet_id     = local.Privsn001_id
-    ad                 = local.Sp3_ad
+    ad                 = local.Fn4_ad
     worker_shape       = var.worker_shape
     worker_image       = var.worker_image
     worker_ocpus       = local.is_flexible_worker_shape ? var.worker_ocpus : 0
@@ -82,11 +82,11 @@ data "template_file" "stack_info" {
   }
 }
 
-data "template_file" "install_sp3" {
-  template = file("${path.module}/scripts/install_sp3.sh")
+data "template_file" "install_Fn4" {
+  template = file("${path.module}/scripts/install_Fn4.sh")
 
   vars = {
-    Sp3_gitrepo_secret_id = local.Sp3_gitrepo_secret_id
+    Fn4_gitrepo_secret_id = local.Fn4_gitrepo_secret_id
   }
 }
 
@@ -99,9 +99,9 @@ data "template_file" "install_nginx" {
 
   vars = {
     install_certs            = var.install_certs
-    Sp3dev_ml_ssl_secret_id  = local.Sp3dev_ml_ssl_secret_id
-    Sp3dev_ml_priv_secret_id = local.Sp3dev_ml_priv_secret_id
-    Sp3_env_name             = local.Sp3_env_name
+    Fn4dev_ml_ssl_secret_id  = local.Fn4dev_ml_ssl_secret_id
+    Fn4dev_ml_priv_secret_id = local.Fn4dev_ml_priv_secret_id
+    Fn4_env_name             = local.Fn4_env_name
   }
 }
 
@@ -120,5 +120,5 @@ resource "random_shuffle" "compute_ad" {
 
 locals {
   ad_random = random_shuffle.compute_ad.result[0]
-  Sp3_ad = var.randomise_ad ? local.ad_random : var.ad
+  Fn4_ad = var.randomise_ad ? local.ad_random : var.ad
 }

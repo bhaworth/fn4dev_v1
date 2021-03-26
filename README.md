@@ -1,6 +1,10 @@
 # Fn4 Bootstrap Resource Manager Stack
 The Terraform and Shell scripts within this repository facilitate the build out of an Fn4 cluster using OCI Resource Manager.
 
+
+
+# !! WORK IN PROGRESS !!
+
 ## Resource Manager Files
 The `schema.yaml` file defines the Variable Input/Capture screen within the Resource Manager stack.  It is used to allow dropdown selection of compartments, shapes, ADs and so on.  It also applies verification of inputs and optional variables to be set. The file also allows for capture of information for the worker nodes that the head node will build out.  These details are not used by Terraform other than to input in to the stack_info.json file that is injected in to the head node, together with other details about the stack.
 

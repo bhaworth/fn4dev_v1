@@ -130,22 +130,22 @@ variables:
       operatingSystem: "Canonical Ubuntu"
       operatingSystemVersion: "18.04"
     required: true
-    description: "Compute image for the Head Node server"
-    title: "Head Node Server Image"
+    description: "Compute image for the App / DB server"
+    title: "App / DB Server Image"
   appdbsrv_shape:
     type: oci:core:instanceshape:name
     dependsOn:
       compartmentId: ${compartment_ocid}
       imageID: ${headnode_image}
     required: true
-    description: "Compute shape for the Head Node"
-    title: "Head Node Server Shape"
+    description: "Compute shape for the App / DB"
+    title: "App / DB Server Shape"
   appdbsrv_ocpus:
     type: integer
     minimum: 1
     maximum: 64
     required: true
-    title: "Head Node number of CPUs (cores)"
+    title: "App / DB number of CPUs (cores)"
     description: "You can customize the number of CPU cores to a flexible shape."
     visible:
       and:
@@ -157,7 +157,7 @@ variables:
     minimum: 1
     maximum: 1024
     required: true
-    title: "Head Node memory (GB)"
+    title: "App / DB memory (GB)"
     description: "You can customize the amount of memory allocated to a flexible shape."
     visible:
       and:

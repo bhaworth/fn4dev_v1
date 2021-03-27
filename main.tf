@@ -125,7 +125,7 @@ locals {
   Fn4Headnode_private_ip = oci_core_instance.Fn4Headnode.private_ip
 }
 
-output "Fn4headnodePrivateIP" {
+output "Fn4App_DB_SrvPrivateIP" {
   value = local.Fn4Headnode_private_ip
 }
 

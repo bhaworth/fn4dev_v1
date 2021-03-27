@@ -24,28 +24,17 @@ variableGroups:
       - ${bastion_shape}
       - ${bastion_ocpus}
       - ${bastion_ram}
-  - title: "Head Node Config"
+  - title: "App/DB Server Config"
     variables:
-      - ${headnode_image}
-      - ${headnode_shape}
-      - ${headnode_ocpus}
-      - ${headnode_ram}
-  - title: "Worker Config"
-    variables:
-      - ${select_cust_worker_img}
-      - ${custom_worker_img}
-      - ${worker_image}
-      - ${worker_shape}
-      - ${worker_ocpus}
-      - ${worker_ram}
-      - ${worker_min}
-      - ${worker_max}
-      - ${worker_use_scratch}
+      - ${appdbsrv_count}
+      - ${appdbsrv_image}
+      - ${appdbsrv_shape}
+      - ${appdbsrv_ocpus}
+      - ${appdbsrv_ram}
   - title: "Optional Settings"
     variables:
-      - ${hn_boot_size}
-      - ${hn_data_size}
-      - ${hn_work_size}
+      - ${appdb_boot_size}
+      - ${appdb_backup_size}
       - ${create_child_comp}
       - ${install_certs}
       - ${create_dns}
@@ -77,9 +66,9 @@ variables:
     required: true
     description: "Availability Domain"
     title: "Availability Domain"
-    visible: 
+    visible:
       not:
-        - ${randomise_ad} 
+        - ${randomise_ad}
   ssh_pub_key:
     type: oci:core:ssh:publickey
     title: "Public SSH key"
@@ -113,8 +102,8 @@ variables:
     visible:
       and:
         - eq:
-          - bastion_shape 
-          - "VM.Standard.E3.Flex"
+            - bastion_shape
+            - "VM.Standard.E3.Flex"
   bastion_ram:
     type: integer
     minimum: 1
@@ -125,9 +114,16 @@ variables:
     visible:
       and:
         - eq:
-          - bastion_shape 
-          - "VM.Standard.E3.Flex"
-  headnode_image:
+            - bastion_shape
+            - "VM.Standard.E3.Flex"
+  appdbsrv_count:
+    type: integer
+    minimum: 1
+    maximum: 16
+    required: true
+    title: "Combined App/DB server(s) to deploy"
+    description: "The number of combined App / DB servers that will be deployed"
+  appdbsrv_image:
     type: oci:core:image:id
     dependsOn:
       compartmentId: ${compartment_ocid}
@@ -136,7 +132,7 @@ variables:
     required: true
     description: "Compute image for the Head Node server"
     title: "Head Node Server Image"
-  headnode_shape:
+  appdbsrv_shape:
     type: oci:core:instanceshape:name
     dependsOn:
       compartmentId: ${compartment_ocid}
@@ -144,7 +140,7 @@ variables:
     required: true
     description: "Compute shape for the Head Node"
     title: "Head Node Server Shape"
-  headnode_ocpus:
+  appdbsrv_ocpus:
     type: integer
     minimum: 1
     maximum: 64
@@ -154,9 +150,9 @@ variables:
     visible:
       and:
         - eq:
-          - headnode_shape 
-          - "VM.Standard.E3.Flex"
-  headnode_ram:
+            - appdbsrv_shape
+            - "VM.Standard.E3.Flex"
+  appdbsrv_ram:
     type: integer
     minimum: 1
     maximum: 1024
@@ -166,80 +162,8 @@ variables:
     visible:
       and:
         - eq:
-          - headnode_shape 
-          - "VM.Standard.E3.Flex"
-  select_cust_worker_img:
-    title: "Specify a custom image ID for worker node?"
-    description: "Check this box to specify an image ID rather than select from the image list"
-    type: boolean
-    visible: true
-  custom_worker_img:
-    title: "Custom image OCID"
-    description: "Specify an image OCID here to use, for example, a custom image for the worker nodes in this cluster"
-    type: string
-    visible: ${select_cust_worker_img}
-  worker_image:
-    type: oci:core:image:id
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-      operatingSystem: "Canonical Ubuntu"
-      operatingSystemVersion: "18.04"
-    required: true
-    description: "Compute image for the Worker Nodes"
-    title: "Worker Nodes Image"
-    visible:
-      not: 
-        - select_cust_worker_img
-  worker_shape:
-    type: oci:core:instanceshape:name
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-      imageID: ${worker_image}
-    required: true
-    description: "Compute shape for the Worker Node"
-    title: "Worker Node Server Shape"
-  worker_ocpus:
-    type: integer
-    minimum: 1
-    maximum: 64
-    required: true
-    title: "Worker Node number of CPUs (cores)"
-    description: "You can customize the number of CPU cores to a flexible shape."
-    visible:
-      and:
-        - eq:
-          - worker_shape 
-          - "VM.Standard.E3.Flex"
-  worker_ram:
-    type: integer
-    minimum: 1
-    maximum: 1024
-    required: true
-    title: "Worker Node memory (GB)"
-    description: "You can customize the amount of memory allocated to a flexible shape."
-    visible:
-      and:
-        - eq:
-          - worker_shape 
-          - "VM.Standard.E3.Flex"
-  worker_min:
-    type: integer
-    minimum: 0
-    maximum: 100
-    required: true
-    title: "Minimum number of worker nodes"
-    description: "Minimum is zero, Maximum 100"
-  worker_max:
-    type: integer
-    minimum: 0
-    maximum: 100
-    required: true
-    title: "Maximum number of worker nodes"
-    description: "Maximum is 100 (Minimum 0 - Max must be >= Min"
-  worker_use_scratch:
-    title: "Worker Node use local scratch storage - choose DenseIO shape"
-    type: boolean
-    default: false    
+            - appdbsrv_shape
+            - "VM.Standard.E3.Flex"
   env_name:
     type: string
     title: "Environment Name"
@@ -257,21 +181,15 @@ variables:
     description: "Optional prefix for all Display Names and Hostnames - lower case and digits only - must start with lower case letter"
     pattern: "^[a-z][a-z0-9]+$"
     visible: ${specify_prefix}
-  hn_boot_size:
+  appdb_boot_size:
     type: integer
-    title: "Head Node Server Boot Volume Size"
+    title: "App/DB Server Boot Volume Size"
     description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
     minimum: 50
     maximum: 32768
-  hn_data_size:
+  appdb_data_size:
     type: integer
-    title: "Head Node Server Data Volume Size"
-    description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
-    minimum: 50
-    maximum: 32768
-  hn_work_size:
-    type: integer
-    title: "Head Node Server Work Volume Size"
+    title: "App/DB Server Data Volume Size"
     description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
     minimum: 50
     maximum: 32768
@@ -304,17 +222,11 @@ outputs:
     title: "Bastion DNS / Public IP Address"
     type: copyableString
     visible: true
-  Fn4headnodePrivateIP:
-    title: "Head Node Private IP Address"
+  Fn4App_DB_SrvPrivateIP:
+    title: "App/DB Private IP Address"
     type: copyableString
     visible: true
-  Fn4_loadbalancer_public_ip:
-    visible: false
   Fn4_deploy_id:
     title: "Deployment ID"
     type: string
-    visible: true
-  Fn4_loadbalancer_url:
-    title: "Load Balancer URL"
-    type: link
     visible: true

@@ -6,14 +6,14 @@ variable "bastion_shape" {}
 variable "bastion_image" {}
 variable "bastion_ocpus" { default = 1 }
 variable "bastion_ram" { default = 16 }
-variable "headnode_shape" {}
-variable "headnode_image" {}
-variable "headnode_ocpus" { default = 1 }
-variable "headnode_ram" { default = 16 }
+variable "appdbsrv_shape" {}
+variable "appdbsrv_image" {}
+variable "appdbsrv_ocpus" { default = 1 }
+variable "appdbsrv_ram" { default = 16 }
+variable "appdbsrv_count" { default = 1 }
 variable "bastion_boot_size" { default = 50 }
-variable "hn_boot_size" { default = 120 }
-variable "hn_data_size" { default = 1024 }
-variable "hn_work_size" { default = 1024 }
+variable "appdb_boot_size" { default = 120 }
+variable "appdb_backup_size" { default = 500 }
 variable "randomise_ad" { default = true }
 variable "ad" { default = "" }
 variable "name_prefix" { default = "" }
@@ -21,13 +21,6 @@ variable "env_name" { default = "fn4" }
 variable "deploy_test" { default = false }
 variable "show_testing_others" { default = false }
 variable "specify_prefix" { default = false }
-variable "worker_shape" { default = "" }
-variable "worker_image" { default = "" }
-variable "worker_ocpus" { default = 1 }
-variable "worker_ram" { default = 16 }
-variable "worker_min" { default = 1 }
-variable "worker_max" { default = 1 }
-variable "worker_use_scratch" { default = false }
 variable "create_child_comp" { default = true }
 variable "install_certs" { default = true }
 variable "create_dns" { default = true }
@@ -37,10 +30,9 @@ variable "select_cust_worker_img" { default = false }
 locals {
   compute_flexible_shapes  = ["VM.Standard.E3.Flex"]
   Fn4_deploy_id            = random_string.deploy_id.result
-  Fn4_gitrepo_secret_id    = "ocid1.vaultsecret.oc1.uk-london-1.amaaaaaahe4ejdia3ejrsbqkv6iz2ipwngjmteeduitufuu7u35sgxrx7wna"
-  Fn4dev_ml_ssl_secret_id  = "ocid1.vaultsecret.oc1.uk-london-1.amaaaaaahe4ejdiae2k77jlwnvi4h2fh4siah7xmvp724ljzhliireq4xyua"
-  Fn4dev_ml_priv_secret_id = "ocid1.vaultsecret.oc1.uk-london-1.amaaaaaahe4ejdiazs7ixckx2efzk7ew6xttvaglh3t2itzpxsmadrzx5qjq"
-  Fn4dev_ml_dns_zone_id    = "ocid1.dns-zone.oc1..a17008280ea14d00bda53f8202a3ed5c"
-  Fn4dev_ml_dns_comp_id    = "ocid1.compartment.oc1..aaaaaaaa6gixzvmyijx7v6juqtd32nirubegjpabv7xvqs4im2i53uuqzs3a"
-  Fn4dev_ml_vault_comp_id  = "ocid1.compartment.oc1..aaaaaaaao4kpjckz2pjmlict2ssrnx45ims7ttvxghlluo2tcwv6pgfdlepq"
+  Fn4_gitrepo_secret_id    = ""
+  Fn4dev_ml_ssl_secret_id  = ""
+  Fn4dev_ml_priv_secret_id = ""
+  Fn4dev_ml_dns_zone_id    = "ocid1.dns-zone.oc1..3ec42db37b15485f877bc7aaa5efd291"
+  Fn4dev_comp_id           = "ocid1.compartment.oc1..aaaaaaaapxuxy4xbpyrx5w5z26zs7eebjmxbrnsqlawbf7fwe3voddtkygfq"
 }

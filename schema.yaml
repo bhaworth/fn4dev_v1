@@ -189,7 +189,7 @@ variables:
     maximum: 32768
   appdb_backup_size:
     type: integer
-    title: "App/DB Server Data Volume Size"
+    title: "App/DB Server Backup Volume Size"
     description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
     minimum: 50
     maximum: 32768

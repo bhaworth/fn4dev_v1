@@ -148,7 +148,8 @@ locals {
 # ------ Create Block Storage Attachments
 resource "oci_core_volume_attachment" "Fn4AppDbBackupVolumeAttachment" {
   count                               = var.appdbsrv_count
-  attachment_type                     = "iscsi"
+  attachment_type                     = "paravirtualized"
+  device                              = "/dev/oracleoci/oraclevdb"
   display_name                        = "${local.Fn4_env_name}-AppDb_Backup-VolumeAttachment-${count.index + 1}"
   instance_id                         = local.Fn4AppDb_ids[count.index].id
   is_pv_encryption_in_transit_enabled = "false"

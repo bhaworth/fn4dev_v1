@@ -2,7 +2,7 @@ resource "oci_identity_dynamic_group" "AppDbSrv_DG" {
   compartment_id = var.tenancy_ocid
 
   description   = "Group for App DB Srv in deployment ${local.Fn4_env_name}"
-  matching_rule = "Any {Any {instance.id = '${local.Fn4AppDb_id}'}}"
+  matching_rule = "Any {Any {instance.id = '${local.Fn4AppDb_ids}'}}"
   name          = "${local.Fn4_env_name}_AppDb"
 }
 

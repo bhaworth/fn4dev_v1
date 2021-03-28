@@ -29,23 +29,23 @@ data "template_file" "appdbsrv_cloud_init" {
   }
 }
 
-data "template_cloudinit_config" "bastion" {
-  gzip          = true
-  base64_encode = true
+# data "template_cloudinit_config" "bastion" {
+#   gzip          = true
+#   base64_encode = true
 
-  part {
-    filename     = "cloud-config.yaml"
-    content_type = "text/cloud-config"
-    content      = data.template_file.bastion_cloud_init.rendered
-  }
-}
-data "template_file" "bastion_cloud_init" {
-  template = file("${path.module}/scripts/bastion-cloud-config.template.yaml")
+#   part {
+#     filename     = "cloud-config.yaml"
+#     content_type = "text/cloud-config"
+#     content      = data.template_file.bastion_cloud_init.rendered
+#   }
+# }
+# data "template_file" "bastion_cloud_init" {
+#   template = file("${path.module}/scripts/bastion-cloud-config.template.yaml")
 
-  vars = {
-    # inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
-  }
-}
+#   vars = {
+#     inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
+#   }
+# }
 
 data "template_file" "bootstrap_root" {
   template = file("${path.module}/scripts/bootstrap_root.sh")
@@ -75,13 +75,13 @@ data "template_file" "stack_info" {
   }
 }
 
-data "template_file" "install_Fn4" {
-  template = file("${path.module}/scripts/install_Fn4.sh")
+# data "template_file" "install_Fn4" {
+#   template = file("${path.module}/scripts/install_Fn4.sh")
 
-  vars = {
-    Fn4_gitrepo_secret_id = local.Fn4_gitrepo_secret_id
-  }
-}
+#   vars = {
+#     Fn4_gitrepo_secret_id = local.Fn4_gitrepo_secret_id
+#   }
+# }
 
 data "template_file" "inject_pub_keys" {
   template = file("${path.module}/scripts/inject_pub_keys.sh")

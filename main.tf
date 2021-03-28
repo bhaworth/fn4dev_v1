@@ -156,7 +156,7 @@ resource "oci_core_volume_attachment" "Fn4AppDbBackupVolumeAttachment" {
   is_read_only                        = "false"
   #is_shareable = <<Optional value not found in discovery>>
   #use_chap = <<Optional value not found in discovery>>
-  volume_id = oci_core_volume.Backup.*.id[count.index].id
+  volume_id = oci_core_volume.Backup[count.index].id
 }
 
 output "Fn4_deploy_id" {

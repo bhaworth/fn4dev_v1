@@ -1,36 +1,45 @@
-resource "oci_identity_dynamic_group" "HeadNode_DG" {
+resource "oci_identity_dynamic_group" "AppDbSrv_DG" {
   compartment_id = var.tenancy_ocid
 
-  description   = "Group for Head Node in deployment ${local.Fn4_env_name}"
+  description   = "Group for App DB Srv in deployment ${local.Fn4_env_name}"
   matching_rule = "Any {Any {instance.id = '${local.Fn4Headnode_id}'}}"
-  name          = "${local.Fn4_env_name}_HeadNode"
+  name          = "${local.Fn4_env_name}_AppDb"
 }
 
-resource "oci_identity_policy" "HeadNode_Policy" {
-  compartment_id = var.compartment_ocid
+resource "oci_identity_policy" "AppDb_Policy" {
+  compartment_id = local.Fn4dev_comp_id
 
-  description = "Policy for Head Node in deployment ${local.Fn4_env_name}"
+  description = "Policy for App DB Srv in deployment ${local.Fn4_env_name}"
 
   # Need to know what the correct permissions required are  <<CHANGE_ME>>
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.HeadNode_DG.name} to manage all-resources in compartment id ${var.compartment_ocid}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.AppDb_DG.name} to read all-resources in compartment id ${local.Fn4dev_comp_id}",
   ]
-  name = "${local.Fn4_env_name}_HeadNode"
+  name = "${local.Fn4_env_name}_AppDb"
 }
 
-resource "oci_identity_policy" "HeadNode_Secrets_Policy" {
+resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
+  compartment_id = local.Sp3dev_sandbox_cid
+
+  description = "Policy for Head Node object read in deployment ${local.Fn4_env_name}"
+
+  statements = [
+    "Allow dynamic-group ${oci_identity_dynamic_group.AppDB_DG.name} to read objects in compartment id ${local.Fn4dev_comp_id}",
+  ]
+  name = "${local.Fn4_env_name}_AppDB_Object"
+}
+resource "oci_identity_policy" "AppDb_Secrets_Policy" {
   compartment_id = local.Fn4dev_ml_vault_comp_id
 
-  description = "Policy for Head Node secrets in deployment ${local.Fn4_env_name}"
+  description = "Policy for App DB Srv secrets in deployment ${local.Fn4_env_name}"
 
   # Need to know what the correct permissions required are  <<CHANGE_ME>>
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.HeadNode_DG.name} to use secret-family in compartment sandbox",
-    "Allow dynamic-group ${oci_identity_dynamic_group.HeadNode_DG.name} to read objects in compartment sandbox",
+    "Allow dynamic-group ${oci_identity_dynamic_group.AppDb_DG.name} to read secret-family in compartment id ${local.Fn4dev_comp_id}",
   ]
-  name = "${local.Fn4_env_name}_HeadNode_Secrets"
+  name = "${local.Fn4_env_name}_AppDb_Secrets"
 }
 
 resource "oci_identity_compartment" "Fn4_child_comp" {

@@ -10,16 +10,16 @@ The `schema.yaml` file defines the Variable Input/Capture screen within the Reso
 
 The stack also gives the user the option to disable the default behaviour of creating a dedicated compartment for all resources within the deployment.  This compartment is created under the compartment selected within the stack config.  Other options include deploying a sample nginx HTTPS server with DNS name in oci.Fn4dev.ml.
 
-Upon completion of the deployment, an Application Information tab will be shown within the Stack.  The Public IP of the Bastion as well as the Private IP of the Head Node will be displayed here.  The deployment ID will also be shown - this is included in almost all resource names and is a random 5 character lower case string to help people identify differing stack deployments, beyond the optional environment name and user defined name prefix.
+Upon completion of the deployment, an Application Information tab will be shown within the Stack.  The Public IP of the Bastion as well as the Private IP of the App DB Srv will be displayed here.  The deployment ID will also be shown - this is included in almost all resource names and is a random 5 character lower case string to help people identify differing stack deployments, beyond the optional environment name and user defined name prefix.
 ## Terraform Files
 
 - `vcn.tf` creates the Virtual Cloud network with CIDR 10.0/16, a public subnet (10.0.0.0/24) with route table and security list with an Internet Gateway and a private subnet (10.0.1.0/24) with route table and security list with a NAT Gateway.
-- `main.tf` creates the Compute Instances and Storage Volumes.  A Bastion server is connected to the Public Subnet and a Head Node server for the Fn4 Cluster is attached to the Private Network.  The Head Node has two balanced tier Block Volumes attached via para-virtualisation.
+- `main.tf` creates the Compute Instances and Storage Volumes.  A Bastion server is connected to the Public Subnet and a App DB Srv server for the Fn4 Cluster is attached to the Private Network.  The App DB Srv has two balanced tier Block Volumes attached via para-virtualisation.
 - `lbaas.tf` creates the Load Balancer service with a TCP/443 pass through listener to the headnode as the lone backend server.
 - `lb_nsg.tf` creates the Network Security Group for the Load Balancer
-- `hn_nsg.tf` creates the Network Security Group for the Head Node
+- `hn_nsg.tf` creates the Network Security Group for the App DB Srv
 - `datasources.tf` is used for specific functions and data sources within Terraform
-- `iam.tf` creates a dynamic group and policy to allow OCI CLI operations from the Head Node.  Optionally (default = true) creates a new compartment to house all the stack resources
+- `iam.tf` creates a dynamic group and policy to allow OCI CLI operations from the App DB Srv.  Optionally (default = true) creates a new compartment to house all the stack resources
 - `dns.tf` creates an entry in the test domain oci.Fn4dev.ml for the load balancer public IP
 
 ## Cloud Init Files
@@ -30,7 +30,7 @@ The `scripts` directory contains the scripts and configuration for Cloud Init.
 - `write_files:` is performed before users are created, so first run chmod on ubuntu script so that user ubuntu can run the script
 - run `bash /tmp/inject_pub_keys.sh` as ubuntu
 
-`headnode_cloud-config.template.yaml` contains the instructions for Cloud Init on the Head Node
+`headnode_cloud-config.template.yaml` contains the instructions for Cloud Init on the App DB Srv
 - write `/root/bootstrap_root.sh` and `/tmp/bootstrap_ubuntu.sh`, `/tmp/inject_pub_keys.sh`, `/tmp/stack_info.json`, `/tmp/install_Fn4.sh`
 - run `/root/bootstrap_root.sh`
 - `write_files:` is performed before users are created, so first run chmod on scripts to run as user ubuntu
@@ -62,8 +62,8 @@ The `scripts` directory contains the scripts and configuration for Cloud Init.
 
 `stack_info.json` Includes the following information:
 - Deployment ID
-- Head Node subnet OCID
+- App DB Srv subnet OCID
 - Load Balancer OCID
 - Worker Node details captured in Stack Variables screen
 
-`install_nginx.sh` will, if the option is selected in the stack, pull the wildcard certificate for .oci.Fn4dev.ml from the OCI vault secret store and deploy to the Head Node
+`install_nginx.sh` will, if the option is selected in the stack, pull the wildcard certificate for .oci.Fn4dev.ml from the OCI vault secret store and deploy to the App DB Srv

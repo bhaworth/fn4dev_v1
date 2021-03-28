@@ -6,26 +6,26 @@ resource "random_string" "deploy_id" {
   number  = false
 }
 
-data "template_cloudinit_config" "headnode" {
+data "template_cloudinit_config" "appdbsrv" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "cloud-config.yaml"
     content_type = "text/cloud-config"
-    content      = data.template_file.headnode_cloud_init.rendered
+    content      = data.template_file.appdbsrv_cloud_init.rendered
   }
 }
-data "template_file" "headnode_cloud_init" {
-  template = file("${path.module}/scripts/headnode-cloud-config.template.yaml")
+data "template_file" "appdbsrv_cloud_init" {
+  template = file("${path.module}/scripts/appdbsrv-cloud-config.template.yaml")
 
   vars = {
-    bootstrap_root_sh_content   = base64gzip(data.template_file.bootstrap_root.rendered)
-    bootstrap_ubuntu_sh_content = base64gzip(data.template_file.bootstrap_ubuntu.rendered)
-    stack_info_content          = base64gzip(data.template_file.stack_info.rendered)
-    install_Fn4_sh_content      = base64gzip(data.template_file.install_Fn4.rendered)
-    inject_pub_keys_sh_content  = base64gzip(data.template_file.inject_pub_keys.rendered)
-    install_nginx_sh_content    = base64gzip(data.template_file.install_nginx.rendered)
+    bootstrap_root_sh_content = base64gzip(data.template_file.bootstrap_root.rendered)
+    # bootstrap_ubuntu_sh_content = base64gzip(data.template_file.bootstrap_ubuntu.rendered)
+    stack_info_content = base64gzip(data.template_file.stack_info.rendered)
+    # install_Fn4_sh_content      = base64gzip(data.template_file.install_Fn4.rendered)
+    # inject_pub_keys_sh_content  = base64gzip(data.template_file.inject_pub_keys.rendered)
+    # install_nginx_sh_content    = base64gzip(data.template_file.install_nginx.rendered)
   }
 }
 
@@ -43,7 +43,7 @@ data "template_file" "bastion_cloud_init" {
   template = file("${path.module}/scripts/bastion-cloud-config.template.yaml")
 
   vars = {
-    inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
+    # inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
   }
 }
 
@@ -65,20 +65,13 @@ data "template_file" "stack_info" {
 
   # Variables parsed into stack_info.json as it is encoded in to Cloud-Init
   vars = {
-    deployment_id      = local.Fn4_deploy_id
-    compartment_id     = local.Fn4_cid
-    tenancy_id         = var.tenancy_ocid
-    load_balancer_id   = local.Fn4_lb_id
-    Fn4_url            = local.Fn4_lb_url
-    priv_subnet_id     = local.Privsn001_id
-    ad                 = local.Fn4_ad
-    worker_shape       = var.worker_shape
-    worker_image       = var.worker_image
-    worker_ocpus       = local.is_flexible_worker_shape ? var.worker_ocpus : 0
-    worker_ram         = local.is_flexible_worker_shape ? var.worker_ram : 0
-    worker_min         = var.worker_min
-    worker_max         = var.worker_max
-    worker_use_scratch = var.worker_use_scratch
+    deployment_id  = local.Fn4_deploy_id
+    compartment_id = local.Fn4_cid
+    tenancy_id     = var.tenancy_ocid
+    # load_balancer_id   = local.Fn4_lb_id
+    # Fn4_url            = local.Fn4_lb_url
+    priv_subnet_id = local.Privsn001_id
+    ad             = local.Fn4_ad
   }
 }
 
@@ -105,10 +98,6 @@ data "template_file" "install_nginx" {
   }
 }
 
-locals {
-  is_flexible_worker_shape = contains(local.compute_flexible_shapes, var.worker_shape)
-}
-
 data "oci_identity_availability_domains" "ads" {
   compartment_id = var.tenancy_ocid
 }
@@ -120,5 +109,5 @@ resource "random_shuffle" "compute_ad" {
 
 locals {
   ad_random = random_shuffle.compute_ad.result[0]
-  Fn4_ad = var.randomise_ad ? local.ad_random : var.ad
+  Fn4_ad    = var.randomise_ad ? local.ad_random : var.ad
 }

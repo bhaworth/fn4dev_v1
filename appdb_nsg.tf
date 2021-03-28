@@ -1,19 +1,17 @@
-# Network Security Group for the Head Node
+# Network Security Group for App/DB Nodes
 
-# Allows Public and Private Network to mount NFS shares from Head Node and access port 80
-
-resource "oci_core_network_security_group" "headnode_nsg" {
-  display_name   = "${local.Fn4_env_name}-hn-nsg"
+resource "oci_core_network_security_group" "appdb_nsg" {
+  display_name   = "${local.Fn4_env_name}-appdb-nsg"
   vcn_id         = local.Fn4_vcn_id
   compartment_id = local.Fn4_cid
 }
 
 locals {
-  hn_nsg_id = oci_core_network_security_group.headnode_nsg.id
+  appdb_nsg_id = oci_core_network_security_group.appdb_nsg.id
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule1" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule1" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "6"
@@ -29,8 +27,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule1" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule2" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule2" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "6"
@@ -46,8 +44,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule2" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule3" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule3" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "6"
@@ -63,8 +61,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule3" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule4" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule4" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "17"
@@ -80,8 +78,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule4" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule5" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule5" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "17"
@@ -97,8 +95,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule5" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule6" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule6" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "17"
@@ -114,8 +112,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule6" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule7" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule7" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "17"
@@ -131,8 +129,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule7" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule8" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule8" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "6"
@@ -148,8 +146,8 @@ resource "oci_core_network_security_group_security_rule" "hn-nsg-rule8" {
   }
 }
 
-resource "oci_core_network_security_group_security_rule" "hn-nsg-rule9" {
-  network_security_group_id = local.hn_nsg_id
+resource "oci_core_network_security_group_security_rule" "appdb-nsg-rule9" {
+  network_security_group_id = local.appdb_nsg_id
 
   direction   = "INGRESS"
   protocol    = "6"

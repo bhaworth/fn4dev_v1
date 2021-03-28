@@ -1,46 +1,46 @@
-resource "oci_identity_dynamic_group" "AppDbSrv_DG" {
-  compartment_id = var.tenancy_ocid
+# resource "oci_identity_dynamic_group" "AppDbSrv_DG" {
+#   compartment_id = var.tenancy_ocid
 
-  description   = "Group for App DB Srv in deployment ${local.Fn4_env_name}"
-  # matching_rule = "Any {Any {instance.id = '${local.Fn4AppDb_ids}'}}"
-  name          = "${local.Fn4_env_name}_AppDb"
-}
+#   description   = "Group for App DB Srv in deployment ${local.Fn4_env_name}"
+#   # matching_rule = "Any {Any {instance.id = '${local.Fn4AppDb_ids}'}}"
+#   name          = "${local.Fn4_env_name}_AppDb"
+# }
 
-resource "oci_identity_policy" "AppDb_Policy" {
-  compartment_id = local.Fn4dev_comp_id
+# resource "oci_identity_policy" "AppDb_Policy" {
+#   compartment_id = local.Fn4dev_comp_id
 
-  description = "Policy for App DB Srv in deployment ${local.Fn4_env_name}"
+#   description = "Policy for App DB Srv in deployment ${local.Fn4_env_name}"
 
-  # Need to know what the correct permissions required are  <<CHANGE_ME>>
+#   # Need to know what the correct permissions required are  <<CHANGE_ME>>
 
-  statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read all-resources in compartment id ${local.Fn4dev_comp_id}",
-  ]
-  name = "${local.Fn4_env_name}_AppDb"
-}
+#   statements = [
+#     "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read all-resources in compartment id ${local.Fn4dev_comp_id}",
+#   ]
+#   name = "${local.Fn4_env_name}_AppDb"
+# }
 
-resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
-  compartment_id = local.Fn4dev_comp_id
+# resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
+#   compartment_id = local.Fn4dev_comp_id
 
-  description = "Policy for Head Node object read in deployment ${local.Fn4_env_name}"
+#   description = "Policy for Head Node object read in deployment ${local.Fn4_env_name}"
 
-  statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read objects in compartment id ${local.Fn4dev_comp_id}",
-  ]
-  name = "${local.Fn4_env_name}_AppDB_Object"
-}
-resource "oci_identity_policy" "AppDb_Secrets_Policy" {
-  compartment_id = local.Fn4dev_comp_id
+#   statements = [
+#     "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read objects in compartment id ${local.Fn4dev_comp_id}",
+#   ]
+#   name = "${local.Fn4_env_name}_AppDB_Object"
+# }
+# resource "oci_identity_policy" "AppDb_Secrets_Policy" {
+#   compartment_id = local.Fn4dev_comp_id
 
-  description = "Policy for App DB Srv secrets in deployment ${local.Fn4_env_name}"
+#   description = "Policy for App DB Srv secrets in deployment ${local.Fn4_env_name}"
 
-  # Need to know what the correct permissions required are  <<CHANGE_ME>>
+#   # Need to know what the correct permissions required are  <<CHANGE_ME>>
 
-  statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read secret-family in compartment id ${local.Fn4dev_comp_id}",
-  ]
-  name = "${local.Fn4_env_name}_AppDb_Secrets"
-}
+#   statements = [
+#     "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read secret-family in compartment id ${local.Fn4dev_comp_id}",
+#   ]
+#   name = "${local.Fn4_env_name}_AppDb_Secrets"
+# }
 
 resource "oci_identity_compartment" "Fn4_child_comp" {
   # If 'create child compartment' is true, create a new compartment else don't

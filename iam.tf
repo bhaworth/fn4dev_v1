@@ -2,7 +2,7 @@ resource "oci_identity_dynamic_group" "AppDbSrv_DG" {
   compartment_id = var.tenancy_ocid
 
   description   = "Group for App DB Srv in deployment ${local.Fn4_env_name}"
-  matching_rule = "Any {Any {instance.id = '${local.Fn4Fn4AppDb_id}'}}"
+  matching_rule = "Any {Any {instance.id = '${local.Fn4AppDb_id}'}}"
   name          = "${local.Fn4_env_name}_AppDb"
 }
 
@@ -25,7 +25,7 @@ resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
   description = "Policy for Head Node object read in deployment ${local.Fn4_env_name}"
 
   statements = [
-    "Allow dynamic-group ${oci_identity_dynamic_group.AppDBSrv_DG.name} to read objects in compartment id ${local.Fn4dev_comp_id}",
+    "Allow dynamic-group ${oci_identity_dynamic_group.AppDbSrv_DG.name} to read objects in compartment id ${local.Fn4dev_comp_id}",
   ]
   name = "${local.Fn4_env_name}_AppDB_Object"
 }

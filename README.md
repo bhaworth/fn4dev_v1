@@ -5,7 +5,7 @@ The Terraform and Shell scripts within this repository facilitate the build out 
 
 # !! WORK IN PROGRESS !!
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/bhaworth/fn4dev_v1/main.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/bhaworth/fn4dev_v1/archive/refs/heads/main.zip)
 
 ## Resource Manager Files
 The `schema.yaml` file defines the Variable Input/Capture screen within the Resource Manager stack.  It is used to allow dropdown selection of compartments, shapes, ADs and so on.  It also applies verification of inputs and optional variables to be set. The file also allows for capture of information for the worker nodes that the head node will build out.  These details are not used by Terraform other than to input in to the stack_info.json file that is injected in to the head node, together with other details about the stack.

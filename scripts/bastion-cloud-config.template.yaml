@@ -5,8 +5,6 @@ write_files:
   # - path: "/tmp/inject_pub_keys.sh"
   #   permissions: "0777"
   #   encoding: "gzip+base64"
-  #   content: |
-  #     $ { inject_pub_keys_sh_content }
 
 runcmd:
 #  - echo "Set permissions on scripts to run as ubuntu user."

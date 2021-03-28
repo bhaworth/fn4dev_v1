@@ -162,3 +162,7 @@ resource "oci_core_volume_attachment" "Fn4AppDbBackupVolumeAttachment" {
 output "Fn4_deploy_id" {
   value = local.Fn4_deploy_id
 }
+
+output "backup_vol_ids" { value = local.Backup_ids }
+output "appdbsrv_ids" { value = local.Fn4AppDb_ids }
+

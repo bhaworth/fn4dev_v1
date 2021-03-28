@@ -20,7 +20,7 @@ resource "oci_identity_policy" "AppDb_Policy" {
 }
 
 resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
-  compartment_id = local.Sp3dev_sandbox_cid
+  compartment_id = local.Fn4dev_comp_id
 
   description = "Policy for Head Node object read in deployment ${local.Fn4_env_name}"
 
@@ -30,7 +30,7 @@ resource "oci_identity_policy" "AppDB_Sandbox_Object_Policy" {
   name = "${local.Fn4_env_name}_AppDB_Object"
 }
 resource "oci_identity_policy" "AppDb_Secrets_Policy" {
-  compartment_id = local.Fn4dev_ml_vault_comp_id
+  compartment_id = local.Fn4dev_comp_id
 
   description = "Policy for App DB Srv secrets in deployment ${local.Fn4_env_name}"
 

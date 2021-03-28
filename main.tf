@@ -151,12 +151,12 @@ resource "oci_core_volume_attachment" "Fn4AppDbBackupVolumeAttachment" {
   attachment_type                     = "paravirtualized"
   device                              = "/dev/oracleoci/oraclevdb"
   display_name                        = "${local.Fn4_env_name}-AppDb_Backup-VolumeAttachment-${count.index + 1}"
-  instance_id                         = local.Fn4AppDb_ids[count.index].id
+  instance_id                         = oci_core_instance.Fn4AppDb[count.index].id
   is_pv_encryption_in_transit_enabled = "false"
   is_read_only                        = "false"
   #is_shareable = <<Optional value not found in discovery>>
   #use_chap = <<Optional value not found in discovery>>
-  volume_id = local.Backup_ids[count.index]
+  volume_id = oci_core_volume.Backup.*.id[count.index].id
 }
 
 output "Fn4_deploy_id" {

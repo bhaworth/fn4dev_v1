@@ -50,15 +50,15 @@ data "template_file" "bastion_cloud_init" {
 data "template_file" "bootstrap_root" {
   template = file("${path.module}/scripts/bootstrap_root.sh")
 }
-data "template_file" "bootstrap_ubuntu" {
-  template = file("${path.module}/scripts/bootstrap_ubuntu.sh")
+# data "template_file" "bootstrap_ubuntu" {
+#   template = file("${path.module}/scripts/bootstrap_ubuntu.sh")
 
-  # Variables parsed into bootstrap_ubuntu.sh as it is encoded in to Cloud-Init
-  vars = {
-    deployment_id = local.Fn4_deploy_id
-    tenancy_id    = var.tenancy_ocid
-  }
-}
+#   # Variables parsed into bootstrap_ubuntu.sh as it is encoded in to Cloud-Init
+#   vars = {
+#     deployment_id = local.Fn4_deploy_id
+#     tenancy_id    = var.tenancy_ocid
+#   }
+# }
 
 data "template_file" "stack_info" {
   template = file("${path.module}/scripts/stack_info.json")
@@ -87,16 +87,16 @@ data "template_file" "inject_pub_keys" {
   template = file("${path.module}/scripts/inject_pub_keys.sh")
 }
 
-data "template_file" "install_nginx" {
-  template = file("${path.module}/scripts/install_nginx.sh")
+# data "template_file" "install_nginx" {
+#   template = file("${path.module}/scripts/install_nginx.sh")
 
-  vars = {
-    install_certs            = var.install_certs
-    Fn4dev_ml_ssl_secret_id  = local.Fn4dev_ml_ssl_secret_id
-    Fn4dev_ml_priv_secret_id = local.Fn4dev_ml_priv_secret_id
-    Fn4_env_name             = local.Fn4_env_name
-  }
-}
+#   vars = {
+#     install_certs            = var.install_certs
+#     Fn4dev_ml_ssl_secret_id  = local.Fn4dev_ml_ssl_secret_id
+#     Fn4dev_ml_priv_secret_id = local.Fn4dev_ml_priv_secret_id
+#     Fn4_env_name             = local.Fn4_env_name
+#   }
+# }
 
 data "oci_identity_availability_domains" "ads" {
   compartment_id = var.tenancy_ocid

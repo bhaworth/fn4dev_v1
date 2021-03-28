@@ -75,19 +75,20 @@ output "Fn4_bastion" {
 
 # ------ Create App DB Srv Instance
 resource "oci_core_instance" "Fn4AppDb" {
+  count = var.appdbsrv_count
   # Required
   compartment_id = local.Fn4_cid
   shape          = local.Fn4_appdbsrv_shape
   # Optional
-  display_name        = "${local.Fn4_env_name}-appdb"
+  display_name        = "${local.Fn4_env_name}-appdb-${count.index + 1}"
   availability_domain = local.Fn4_ad
   create_vnic_details {
     # Required
     subnet_id = local.Privsn001_id
     # Optional
     assign_public_ip       = false
-    display_name           = "${local.Fn4_env_name}-appdb vnic 00"
-    hostname_label         = "${local.Fn4_env_name}-appdb"
+    display_name           = "${local.Fn4_env_name}-appdb-${count.index + 1} vnic 00"
+    hostname_label         = "${local.Fn4_env_name}-appdb-${count.index + 1}"
     skip_source_dest_check = "false"
     nsg_ids                = [local.appdb_nsg_id]
   }
@@ -120,40 +121,41 @@ resource "oci_core_instance" "Fn4AppDb" {
 }
 
 locals {
-  Fn4AppDb_id         = oci_core_instance.Fn4AppDb.id
-  Fn4AppDb_private_ip = oci_core_instance.Fn4AppDb.private_ip
+  Fn4AppDb_ids         = oci_core_instance.Fn4AppDb.*.id
+  Fn4AppDb_private_ips = oci_core_instance.Fn4AppDb.*.private_ip
 }
 
 output "Fn4App_DB_SrvPrivateIP" {
-  value = local.Fn4AppDb_private_ip
+  value = [local.Fn4AppDb_private_ips]
 }
 
-# ------ Create Block Storage Volume
+# ------ Create Block Storage Volume for Backup
 resource "oci_core_volume" "Backup" {
+  count = var.appdbsrv_count
   # Required
   compartment_id      = local.Fn4_cid
   availability_domain = local.Fn4_ad
   # Optional
-  display_name = "${local.Fn4_env_name}-backup"
+  display_name = "${local.Fn4_env_name}-backup-${count.index + 1}"
   size_in_gbs  = var.appdb_backup_size
   vpus_per_gb  = "10"
 }
 
 locals {
-  Backup_id = oci_core_volume.Backup.id
+  Backup_ids = oci_core_volume.Backup.*.id
 }
 
 # ------ Create Block Storage Attachments
 resource "oci_core_volume_attachment" "Fn4AppDbBackupVolumeAttachment" {
-  attachment_type                     = "paravirtualized"
-  device                              = "/dev/oracleoci/oraclevdb"
-  display_name                        = "${local.Fn4_env_name}-AppDb_Backup-VolumeAttachment"
-  instance_id                         = local.Fn4AppDb_id
+  count                               = var.appdbsrv_count
+  attachment_type                     = "iscsi"
+  display_name                        = "${local.Fn4_env_name}-AppDb_Backup-VolumeAttachment-${count.index + 1}"
+  instance_id                         = local.Fn4AppDb_ids[count.index].id
   is_pv_encryption_in_transit_enabled = "false"
   is_read_only                        = "false"
   #is_shareable = <<Optional value not found in discovery>>
   #use_chap = <<Optional value not found in discovery>>
-  volume_id = local.Backup_id
+  volume_id = local.Backup_ids[count.index]
 }
 
 output "Fn4_deploy_id" {

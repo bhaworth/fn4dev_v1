@@ -7,7 +7,7 @@ locals {
 
 
 # ------ Create DB Srv Instance
-resource "oci_core_instance" "FnDb" {
+resource "oci_core_instance" "Fn4Db" {
   count = var.dbsrv_count
   # Required
   compartment_id = local.Fn4_cid

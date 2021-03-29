@@ -4,10 +4,11 @@ provider "oci" {
 }
 
 locals {
-  Fn4_ssh_key                = var.ssh_pub_key
-  Fn4_bastion_shape          = var.bastion_shape
-  Fn4_bastion_image          = var.bastion_image
-  is_flexible_bastion_shape  = contains(local.compute_flexible_shapes, local.Fn4_bastion_shape)
+  Fn4_ssh_key               = var.ssh_pub_key
+  Fn4_bastion_shape         = var.bastion_shape
+  Fn4_bastion_image         = var.bastion_image
+  Fn4_env_name              = var.name_prefix == "" ? "${var.env_name}-${local.Fn4_deploy_id}" : "${var.name_prefix}-${var.env_name}-${local.Fn4_deploy_id}"
+  is_flexible_bastion_shape = contains(local.compute_flexible_shapes, local.Fn4_bastion_shape)
 }
 
 # ------ Create Instance

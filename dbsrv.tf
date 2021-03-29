@@ -94,7 +94,7 @@ resource "oci_core_volume_attachment" "BackupCloneVolumeAttachment" {
   attachment_type                     = "paravirtualized"
   device                              = "/dev/oracleoci/oraclevdb"
   display_name                        = "${local.Fn4_env_name}-BackupCloneVolumeAttachment"
-  instance_id                         = oci_core_instance.Fn4AppDb[0].id
+  instance_id                         = oci_core_instance.Fn4Db[0].id
   is_pv_encryption_in_transit_enabled = "false"
   is_read_only                        = "false"
   #is_shareable = <<Optional value not found in discovery>>

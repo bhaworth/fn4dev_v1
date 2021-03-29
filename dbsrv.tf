@@ -85,7 +85,7 @@ resource "oci_core_volume" "BackupClone" {
 }
 
 locals {
-  BackupVol_id = oci_core_volume.BackupClone.id
+  BackupVol_id = oci_core_volume.BackupClone[0].id
 }
 
 # ------ Create Block Storage Attachments

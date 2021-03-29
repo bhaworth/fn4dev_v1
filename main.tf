@@ -126,7 +126,7 @@ locals {
 }
 
 output "Fn4App_DB_SrvPrivateIP" {
-  value = [local.Fn4AppDb_private_ips]
+  value = local.Fn4AppDb_private_ips
 }
 
 # ------ Create Block Storage Volume for Backup
@@ -163,6 +163,6 @@ output "Fn4_deploy_id" {
   value = local.Fn4_deploy_id
 }
 
-output "backup_vol_ids" { value = [local.Backup_ids] }
-output "appdbsrv_ids" { value = [local.Fn4AppDb_ids] }
+output "backup_vol_ids" { value = local.Backup_ids }
+output "appdbsrv_ids" { value = local.Fn4AppDb_ids }
 

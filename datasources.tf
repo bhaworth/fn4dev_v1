@@ -6,21 +6,46 @@ resource "random_string" "deploy_id" {
   number  = false
 }
 
-data "template_cloudinit_config" "appdbsrv" {
+data "template_cloudinit_config" "dbsrv" {
   gzip          = true
   base64_encode = true
 
   part {
     filename     = "cloud-config.yaml"
     content_type = "text/cloud-config"
-    content      = data.template_file.appdbsrv_cloud_init.rendered
+    content      = data.template_file.dbsrv_cloud_init.rendered
   }
 }
-data "template_file" "appdbsrv_cloud_init" {
-  template = file("${path.module}/scripts/appdbsrv-cloud-config.template.yaml")
+
+data "template_cloudinit_config" "appsrv" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    filename     = "cloud-config.yaml"
+    content_type = "text/cloud-config"
+    content      = data.template_file.appsrv_cloud_init.rendered
+  }
+}
+
+data "template_file" "dbsrv_cloud_init" {
+  template = file("${path.module}/scripts/dbsrv-cloud-config.template.yaml")
 
   vars = {
-    bootstrap_root_sh_content = base64gzip(data.template_file.bootstrap_root.rendered)
+    bootstrap_db_root_sh_content = base64gzip(data.template_file.bootstrap_db_root.rendered)
+    # bootstrap_ubuntu_sh_content = base64gzip(data.template_file.bootstrap_ubuntu.rendered)
+    stack_info_content = base64gzip(data.template_file.stack_info.rendered)
+    # install_Fn4_sh_content      = base64gzip(data.template_file.install_Fn4.rendered)
+    # inject_pub_keys_sh_content  = base64gzip(data.template_file.inject_pub_keys.rendered)
+    # install_nginx_sh_content    = base64gzip(data.template_file.install_nginx.rendered)
+  }
+}
+
+data "template_file" "appsrv_cloud_init" {
+  template = file("${path.module}/scripts/appsrv-cloud-config.template.yaml")
+
+  vars = {
+    # bootstrap_db_root_sh_content = base64gzip(data.template_file.bootstrap_db_root.rendered)
     # bootstrap_ubuntu_sh_content = base64gzip(data.template_file.bootstrap_ubuntu.rendered)
     stack_info_content = base64gzip(data.template_file.stack_info.rendered)
     # install_Fn4_sh_content      = base64gzip(data.template_file.install_Fn4.rendered)
@@ -42,13 +67,13 @@ data "template_cloudinit_config" "bastion" {
 data "template_file" "bastion_cloud_init" {
   template = file("${path.module}/scripts/bastion-cloud-config.template.yaml")
 
-#   vars = {
-#     inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
-#   }
+  #   vars = {
+  #     inject_pub_keys_sh_content = base64gzip(data.template_file.inject_pub_keys.rendered)
+  #   }
 }
 
-data "template_file" "bootstrap_root" {
-  template = file("${path.module}/scripts/bootstrap_root.sh")
+data "template_file" "bootstrap_db_root" {
+  template = file("${path.module}/scripts/bootstrap_db_root.sh")
 }
 # data "template_file" "bootstrap_ubuntu" {
 #   template = file("${path.module}/scripts/bootstrap_ubuntu.sh")
@@ -72,6 +97,8 @@ data "template_file" "stack_info" {
     # Fn4_url            = local.Fn4_lb_url
     priv_subnet_id = local.Privsn001_id
     ad             = local.Fn4_ad
+    db_shape       = local.dbsrv_shape
+    app_shape      = local.appsrv_shape
   }
 }
 
@@ -108,6 +135,7 @@ resource "random_shuffle" "compute_ad" {
 }
 
 locals {
-  ad_random = random_shuffle.compute_ad.result[0]
-  Fn4_ad    = var.randomise_ad ? local.ad_random : var.ad
+  ad_random_seq = random_shuffle.compute_ad.result
+  # ad_random = random_shuffle.compute_ad.result[0]
+  Fn4_ad    = local.ad_random_seq[0]
 }

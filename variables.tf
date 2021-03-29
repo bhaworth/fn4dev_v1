@@ -6,16 +6,23 @@ variable "bastion_shape" {}
 variable "bastion_image" {}
 variable "bastion_ocpus" { default = 1 }
 variable "bastion_ram" { default = 16 }
-variable "appdbsrv_shape" {}
-variable "appdbsrv_image" {}
-variable "appdbsrv_ocpus" { default = 1 }
-variable "appdbsrv_ram" { default = 16 }
-variable "appdbsrv_count" { default = 1 }
+variable "appsrv_shape" {}
+variable "appsrv_image" {}
+variable "appsrv_ocpus" { default = 1 }
+variable "appsrv_ram" { default = 16 }
+variable "appsrv_count" { default = 1 }
+variable "appsrv_boot_size" { default = 120 }
+variable "dbsrv_shape" {}
+variable "dbsrv_image" {}
+variable "dbsrv_ocpus" { default = 1 }
+variable "dbsrv_ram" { default = 16 }
+variable "dbsrv_count" { default = 1 }
+variable "dbsrv_boot_size" { default = 120 }
+variable "clone_db_backup" { default = true }
+variable "dbsrv_src_backup_vol_id" { default = "" }
 variable "bastion_boot_size" { default = 50 }
-variable "appdb_boot_size" { default = 120 }
-variable "appdb_backup_size" { default = 500 }
-variable "randomise_ad" { default = true }
-variable "ad" { default = "" }
+# variable "randomise_ad" { default = true }
+# variable "ad" { default = "" }
 variable "name_prefix" { default = "" }
 variable "env_name" { default = "fn4" }
 variable "deploy_test" { default = false }

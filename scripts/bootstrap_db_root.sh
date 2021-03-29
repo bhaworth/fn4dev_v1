@@ -24,21 +24,27 @@ apt install -y jq
 
 # Partition and Format Block Volumes
 
-echo 'type=83' | sfdisk /dev/oracleoci/oraclevdb
+mdadm --create /dev/md0 --raid-devices=2 --level=1 /dev/nvme0n1 /dev/nvme1n1
+mdadm --detail --scan | tee -a /etc/mdadm.conf >> /dev/null
+
+parted -s -a optimal -- /dev/md0 mklabel gpt mkpart primary 1MiB -512s
 
 sleep 10
 
-mkfs -t xfs /dev/oracleoci/oraclevdb1
+mkfs -t xfs /dev/md0p1
 
-# Mount the volumes
-
-mkdir /backup
+mkdir /backup /data
 
 # Add to fstab
 
-echo '/dev/oracleoci/oraclevdb1 /backup xfs defaults 0 0' >> /etc/fstab
+if [ -b /dev/oracleoci/oraclevdb1 ]
+ then
+  echo '/dev/oracleoci/oraclevdb1 /backup xfs defaults 0 0' >> /etc/fstab
+  mount /backup
+fi  
 
-mount /backup
+echo '/dev/md0p1 /data xfs defaults 0 0' >> /etc/fstab
+mount /data
 
 # Install NFS Server
 

@@ -12,8 +12,6 @@ variableGroups:
       - ${tenancy_ocid}
       - ${region}
       - ${compartment_ocid}
-      - ${randomise_ad}
-      - ${ad}
       - ${ssh_pub_key}
       - ${env_name}
       - ${specify_prefix}
@@ -24,19 +22,25 @@ variableGroups:
       - ${bastion_shape}
       - ${bastion_ocpus}
       - ${bastion_ram}
-  - title: "App/DB Server Config"
+  - title: "App Server Config"
     variables:
-      - ${appdbsrv_count}
-      - ${appdbsrv_image}
-      - ${appdbsrv_shape}
-      - ${appdbsrv_ocpus}
-      - ${appdbsrv_ram}
+      - ${appsrv_count}
+      - ${appsrv_image}
+      - ${appsrv_shape}
+      - ${appsrv_ocpus}
+      - ${appsrv_ram}
+  - title: "DB Server Config"
+    variables:
+      - ${dbsrv_count}
+      - ${dbsrv_image}
+      - ${dbsrv_shape}
+      - ${dbsrv_ocpus}
+      - ${dbsrv_ram}
   - title: "Optional Settings"
     variables:
-      - ${appdb_boot_size}
-      - ${appdb_backup_size}
+      - ${appsrv_boot_size}
+      - ${dbsrv_boot_size}
       - ${create_child_comp}
-      - ${install_certs}
       - ${create_dns}
       - ${show_testing_others}
   - title: "Testing / Other Settings"
@@ -54,21 +58,6 @@ variables:
     title: "Target Compartment"
     type: oci:identity:compartment:id
     required: true
-  randomise_ad:
-    type: boolean
-    title: "Select random Availability Domain for cluster"
-    description: "All nodes for this cluster and the Bastion will be placed in the same, randomly selected AD."
-    default: true
-  ad:
-    type: oci:identity:availabilitydomain:name
-    dependsOn:
-      compartmentId: ${compartment_ocid}
-    required: true
-    description: "Availability Domain"
-    title: "Availability Domain"
-    visible:
-      not:
-        - ${randomise_ad}
   ssh_pub_key:
     type: oci:core:ssh:publickey
     title: "Public SSH key"
@@ -80,7 +69,7 @@ variables:
     dependsOn:
       compartmentId: ${compartment_ocid}
       operatingSystem: "Canonical Ubuntu"
-      operatingSystemVersion: "18.04"
+      operatingSystemVersion: "20.04"
     required: true
     description: "Compute image for the Bastion server"
     title: "Bastion Server Image"
@@ -116,54 +105,113 @@ variables:
         - eq:
             - bastion_shape
             - "VM.Standard.E3.Flex"
-  appdbsrv_count:
+  appsrv_count:
     type: integer
     minimum: 1
     maximum: 16
     required: true
-    title: "Combined App/DB server(s) to deploy"
-    description: "The number of combined App / DB servers that will be deployed"
-  appdbsrv_image:
+    title: "App server(s) to deploy"
+    description: "The number of combined App server(s) that will be deployed"
+  appsrv_image:
     type: oci:core:image:id
     dependsOn:
       compartmentId: ${compartment_ocid}
       operatingSystem: "Canonical Ubuntu"
-      operatingSystemVersion: "18.04"
+      operatingSystemVersion: "20.04"
     required: true
-    description: "Compute image for the App / DB server"
-    title: "App / DB Server Image"
-  appdbsrv_shape:
+    description: "Compute image for the App server(s)"
+    title: "App Server Image"
+  appsrv_shape:
     type: oci:core:instanceshape:name
     dependsOn:
       compartmentId: ${compartment_ocid}
       imageID: ${headnode_image}
     required: true
-    description: "Compute shape for the App / DB"
-    title: "App / DB Server Shape"
-  appdbsrv_ocpus:
+    description: "Compute shape for the App server(s)"
+    title: "App Server Shape"
+  appsrv_ocpus:
     type: integer
     minimum: 1
     maximum: 64
     required: true
-    title: "App / DB number of CPUs (cores)"
+    title: "App server(s) number of CPUs (cores)"
     description: "You can customize the number of CPU cores to a flexible shape."
     visible:
       and:
         - eq:
-            - appdbsrv_shape
+            - appsrv_shape
             - "VM.Standard.E3.Flex"
-  appdbsrv_ram:
+  appsrv_ram:
     type: integer
     minimum: 1
     maximum: 1024
     required: true
-    title: "App / DB memory (GB)"
+    title: "App server(s) memory (GB)"
     description: "You can customize the amount of memory allocated to a flexible shape."
     visible:
       and:
         - eq:
-            - appdbsrv_shape
+            - appsrv_shape
             - "VM.Standard.E3.Flex"
+  dbsrv_count:
+    type: integer
+    minimum: 1
+    maximum: 16
+    required: true
+    title: "DB server(s) to deploy"
+    description: "The number of combined DB server(s) that will be deployed"
+  dbsrv_image:
+    type: oci:core:image:id
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+      operatingSystem: "Canonical Ubuntu"
+      operatingSystemVersion: "20.04"
+    required: true
+    description: "Compute image for the DB server(s)"
+    title: "DB Server Image"
+  dbsrv_shape:
+    type: oci:core:instanceshape:name
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+      imageID: ${headnode_image}
+    required: true
+    description: "Compute shape for the DB server(s)"
+    title: "DB Server Shape"
+  dbsrv_ocpus:
+    type: integer
+    minimum: 1
+    maximum: 64
+    required: true
+    title: "DB server(s) number of CPUs (cores)"
+    description: "You can customize the number of CPU cores to a flexible shape."
+    visible:
+      and:
+        - eq:
+            - dbsrv_shape
+            - "VM.Standard.E3.Flex"
+  dbsrv_ram:
+    type: integer
+    minimum: 1
+    maximum: 1024
+    required: true
+    title: "DB server(s) memory (GB)"
+    description: "You can customize the amount of memory allocated to a flexible shape."
+    visible:
+      and:
+        - eq:
+            - dbsrv_shape
+            - "VM.Standard.E3.Flex"
+  clone_db_backup:
+    type: boolean
+    title: "Specify backup volume to clone and attach to the first DB server?"
+    default: true
+    required: true
+    description: "Specify backup volume to clone and attach to the first DB server?"
+  dbsrv_src_backup_vol_id:
+    type: string
+    title: "Volume ID to be cloned"
+    visible: ${clone_db_backup}
+    description: "The OCID of the Block Volume that should be cloned and attached to the first DB instance - e.g. ocid1.volume.oc1.uk-london-1.<a-z0-9>"
   env_name:
     type: string
     title: "Environment Name"
@@ -181,15 +229,15 @@ variables:
     description: "Optional prefix for all Display Names and Hostnames - lower case and digits only - must start with lower case letter"
     pattern: "^[a-z][a-z0-9]+$"
     visible: ${specify_prefix}
-  appdb_boot_size:
+  appsrv_boot_size:
     type: integer
-    title: "App/DB Server Boot Volume Size"
+    title: "App Server Boot Volume Size"
     description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
     minimum: 50
     maximum: 32768
-  appdb_backup_size:
+  dbsrv_boot_size:
     type: integer
-    title: "App/DB Server Backup Volume Size"
+    title: "DB Server Boot Volume Size"
     description: "Size in GB.  Size must be between 50 GB and 32,768 GB (32 TB)."
     minimum: 50
     maximum: 32768

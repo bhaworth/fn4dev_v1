@@ -2,11 +2,9 @@
 
 write_files:
 # setup scripts
-  - path: "/root/bootstrap_root.sh"
-    permissions: "0777"
-    encoding: "gzip+base64"
-    content: |
-      ${bootstrap_root_sh_content}
+  # - path: "/root/bootstrap_root.sh"
+  #   permissions: "0777"
+  #   encoding: "gzip+base64"
   # - path: "/tmp/bootstrap_ubuntu.sh"
   #   permissions: "0777"
   #   encoding: "gzip+base64"
@@ -26,11 +24,11 @@ write_files:
   #   encoding: "gzip+base64"
 
 runcmd:
- - echo "Running root script..."
- - /root/bootstrap_root.sh
- - echo "Finished root script."
-#  - echo "Set permissions on scripts to run as ubuntu user."
-#  - chown ubuntu:ubuntu /tmp/bootstrap_ubuntu.sh /tmp/stack_info.json /tmp/install_Fn4.sh /tmp/inject_pub_keys.sh
+#  - echo "Running root script..."
+#  - /root/bootstrap_root.sh
+#  - echo "Finished root script."
+  - echo "Set permissions on scripts to run as ubuntu user."
+  - chown ubuntu:ubuntu /tmp/stack_info.json
 #  - echo "Running ubuntu user script..."
 #  - sudo -i -H -u ubuntu bash /tmp/bootstrap_ubuntu.sh
 #  - echo "Finished ubuntu user script."

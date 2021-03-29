@@ -79,7 +79,7 @@ resource "oci_core_volume" "BackupClone" {
 
   source_details {
     id   = var.dbsrv_src_backup_vol_id
-    type = volume
+    type = "volume"
   }
 
 }

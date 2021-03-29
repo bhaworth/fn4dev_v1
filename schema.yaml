@@ -36,6 +36,8 @@ variableGroups:
       - ${dbsrv_shape}
       - ${dbsrv_ocpus}
       - ${dbsrv_ram}
+      - ${clone_db_backup}
+      - ${dbsrv_src_backup_vol_id}
   - title: "Optional Settings"
     variables:
       - ${appsrv_boot_size}
@@ -210,6 +212,7 @@ variables:
   dbsrv_src_backup_vol_id:
     type: string
     title: "Volume ID to be cloned"
+    required: true
     visible: ${clone_db_backup}
     description: "The OCID of the Block Volume that should be cloned and attached to the first DB instance - e.g. ocid1.volume.oc1.uk-london-1.<a-z0-9>"
   env_name:
@@ -243,10 +246,6 @@ variables:
     maximum: 32768
   create_child_comp:
     title: "Create a child compartment for the stack"
-    type: boolean
-    default: true
-  install_certs:
-    title: "Install fn4dev.ml certificates?"
     type: boolean
     default: true
   create_dns:

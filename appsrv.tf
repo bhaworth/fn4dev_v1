@@ -15,7 +15,7 @@ resource "oci_core_instance" "Fn4App" {
   display_name        = "${local.Fn4_env_name}-app-${count.index + 1}"
   # If count < 3 then fn4_ad else choose another based on calculation based on count
 
-  availability_domain = [count.index < 2] ? local.Fn4_ad : local.ad_random_seq[count.index % length(local.ad_random_seq)]
+  availability_domain = local.ad_random_seq[count.index % length(local.ad_random_seq)]
 
   # Set fault domain to be a calculation from count
 

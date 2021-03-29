@@ -29,7 +29,7 @@ variable "deploy_test" { default = false }
 variable "show_testing_others" { default = false }
 variable "specify_prefix" { default = false }
 variable "create_child_comp" { default = true }
-variable "install_certs" { default = true }
+# variable "install_certs" { default = true }
 variable "create_dns" { default = true }
 
 locals {

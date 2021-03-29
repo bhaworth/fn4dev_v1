@@ -78,8 +78,8 @@ resource "oci_core_volume" "BackupClone" {
   display_name = "${local.Fn4_env_name}-db-backup"
 
   source_details {
-    type = volume
     id   = var.dbsrv_src_backup_vol_id
+    type = volume
   }
 
 }

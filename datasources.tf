@@ -97,8 +97,8 @@ data "template_file" "stack_info" {
     # Fn4_url            = local.Fn4_lb_url
     priv_subnet_id = local.Privsn001_id
     ad             = local.Fn4_ad
-    db_shape       = local.dbsrv_shape
-    app_shape      = local.appsrv_shape
+    db_shape       = var.dbsrv_shape
+    app_shape      = var.appsrv_shape
   }
 }
 

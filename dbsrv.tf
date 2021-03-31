@@ -25,6 +25,7 @@ resource "oci_core_instance" "Fn4Db" {
     subnet_id = local.Privsn001_id
     # Optional
     assign_public_ip       = false
+    # Start the DB server IP(s) half way through the subnet and have then go up in sequence
     private_ip             = "10.0.1.${index.count + 128}"
     display_name           = "${local.Fn4_env_name}-db-${count.index + 1} vnic 00"
     hostname_label         = "${local.Fn4_env_name}-db-${count.index + 1}"

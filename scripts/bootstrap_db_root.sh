@@ -24,7 +24,7 @@ apt install -y jq
 
 # Partition and Format Block Volumes
 
-mdadm --create /dev/md0 --raid-devices=2 --level=1 /dev/nvme0n1 /dev/nvme1n1
+yes | mdadm --create /dev/md0 --raid-devices=2 --level=1 /dev/nvme0n1 /dev/nvme1n1
 mdadm --detail --scan | tee -a /etc/mdadm.conf >> /dev/null
 
 parted -s -a optimal -- /dev/md0 mklabel gpt mkpart primary 1MiB -512s

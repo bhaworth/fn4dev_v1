@@ -12,7 +12,7 @@ resource "oci_core_instance" "Fn4App" {
   compartment_id = local.Fn4_cid
   shape          = local.Fn4_appsrv_shape
   # Optional
-  display_name        = "${local.Fn4_env_name}-app-${count.index + 1}"
+  display_name = "${local.Fn4_env_name}-app-${count.index + 1}"
   # If count < 3 then fn4_ad else choose another based on calculation based on count
 
   availability_domain = local.ad_random_seq[count.index % length(local.ad_random_seq)]
@@ -25,6 +25,7 @@ resource "oci_core_instance" "Fn4App" {
     subnet_id = local.Privsn001_id
     # Optional
     assign_public_ip       = false
+    private_ip             = "10.0.1.${index.count + 2}"
     display_name           = "${local.Fn4_env_name}-app-${count.index + 1} vnic 00"
     hostname_label         = "${local.Fn4_env_name}-app-${count.index + 1}"
     skip_source_dest_check = "false"

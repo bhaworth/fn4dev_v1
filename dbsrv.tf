@@ -13,8 +13,7 @@ resource "oci_core_instance" "Fn4Db" {
   compartment_id = local.Fn4_cid
   shape          = local.Fn4_dbsrv_shape
   # Optional
-  display_name = "${local.Fn4_env_name}-db-${count.index + 1}"
-
+  display_name        = "${local.Fn4_env_name}-db-${count.index + 1}"
   availability_domain = local.ad_random_seq[count.index % length(local.ad_random_seq)]
 
   # Set fault domain to be a calculation from count
@@ -26,6 +25,7 @@ resource "oci_core_instance" "Fn4Db" {
     subnet_id = local.Privsn001_id
     # Optional
     assign_public_ip       = false
+    private_ip             = "10.0.1.${index.count + 128}"
     display_name           = "${local.Fn4_env_name}-db-${count.index + 1} vnic 00"
     hostname_label         = "${local.Fn4_env_name}-db-${count.index + 1}"
     skip_source_dest_check = "false"

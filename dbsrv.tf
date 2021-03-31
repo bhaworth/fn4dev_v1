@@ -65,6 +65,11 @@ output "Fn4Db_SrvPrivateIP" {
 
 output "dbsrv_ids" { value = local.Fn4Db_ids }
 
+# Block Volume Clone 
+data "oci_core_volume" "backup_source" {
+  volume_id = var.dbsrv_src_backup_vol_id
+}
+
 # ------ Create Block Storage Volume
 resource "oci_core_volume" "BackupClone" {
   count = var.clone_db_backup ? 1 : 0
@@ -78,7 +83,7 @@ resource "oci_core_volume" "BackupClone" {
   display_name = "${local.Fn4_env_name}-db-backup"
 
   source_details {
-    id   = var.dbsrv_src_backup_vol_id
+    id   = data.oci_core_volume.backup_source.id
     type = "volume"
   }
 

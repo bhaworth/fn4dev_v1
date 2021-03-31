@@ -25,7 +25,7 @@ resource "oci_core_instance" "Fn4App" {
     subnet_id = local.Privsn001_id
     # Optional
     assign_public_ip       = false
-    private_ip             = "10.0.1.${index.count + 2}"
+    private_ip             = "10.0.1.${count.index + 2}"
     display_name           = "${local.Fn4_env_name}-app-${count.index + 1} vnic 00"
     hostname_label         = "${local.Fn4_env_name}-app-${count.index + 1}"
     skip_source_dest_check = "false"

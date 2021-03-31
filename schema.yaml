@@ -111,9 +111,11 @@ variables:
     type: integer
     minimum: 1
     maximum: 16
+    default: 1
     required: true
     title: "App server(s) to deploy"
     description: "The number of combined App server(s) that will be deployed"
+    visible: false
   appsrv_image:
     type: oci:core:image:id
     dependsOn:

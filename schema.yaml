@@ -280,14 +280,24 @@ outputs:
     type: copyableString
     visible: true
   Fn4App_Srv_PrivateIPs:
-    title: "App Private IP Address"
+    title: "App Private IP Address(es)"
     type: string
     visible: true
   Fn4Db_SrvPrivateIPs:
-    title: "DB Private IP Address"
+    title: "DB Private IP Address(es)"
     type: string
     visible: true
   Fn4_deploy_id:
     title: "Deployment ID"
     type: string
+    visible: true
+  dbsrv_ids:
+    visible: false
+  appsrv_ids:
+    visible: false
+  Fn4_loadbalancer_public_ip:
+    visible: false
+  Fn4_loadbalancer_url:
+    title: "Load Balancer"
+    type: copyableString
     visible: true

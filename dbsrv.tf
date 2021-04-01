@@ -100,7 +100,10 @@ resource "oci_core_volume_attachment" "BackupCloneVolumeAttachment" {
   attachment_type                     = "paravirtualized"
   device                              = "/dev/oracleoci/oraclevdb"
   display_name                        = "${local.Fn4_env_name}-BackupCloneVolumeAttachment"
-  instance_id                         = oci_core_instance.Fn4Db[lookup(local.ad_random_seq,data.oci_core_volume.backup_source.availability_domain)].id
+
+  # Attach the backup volume to the first DB instance in the same AD as the source volume
+  instance_id                         = oci_core_instance.Fn4Db[index(local.ad_random_seq,data.oci_core_volume.backup_source.availability_domain)].id
+  
   is_pv_encryption_in_transit_enabled = "false"
   is_read_only                        = "false"
   #is_shareable = <<Optional value not found in discovery>>

@@ -43,7 +43,7 @@ resource "oci_network_load_balancer_backend_set" "be_set_1" {
 resource "oci_network_load_balancer_listener" "listener_1" {
   default_backend_set_name = oci_network_load_balancer_backend_set.be_set_1.name
   name                     = "listener_1"
-  network_load_balancer_id = local.Fn4_lb_public_ip
+  network_load_balancer_id = local.Fn4_lb_id
   port                     = local.Fn4_lb_port
   protocol                 = "TCP"
 }

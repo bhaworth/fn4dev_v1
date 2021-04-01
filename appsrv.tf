@@ -59,7 +59,7 @@ locals {
   Fn4App_private_ips = oci_core_instance.Fn4App.*.private_ip
 }
 
-output "Fn4App_DB_SrvPrivateIP" {
+output "Fn4App_Srv_PrivateIPs" {
   value = local.Fn4App_private_ips
 }
 

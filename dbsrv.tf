@@ -60,7 +60,7 @@ locals {
   Fn4Db_private_ips = oci_core_instance.Fn4Db.*.private_ip
 }
 
-output "Fn4Db_SrvPrivateIP" {
+output "Fn4Db_SrvPrivateIPs" {
   value = local.Fn4Db_private_ips
 }
 

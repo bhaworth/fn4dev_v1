@@ -279,9 +279,13 @@ outputs:
     title: "Bastion DNS / Public IP Address"
     type: copyableString
     visible: true
-  Fn4App_DB_SrvPrivateIP:
-    title: "App/DB Private IP Address"
-    type: copyableString
+  Fn4App_Srv_PrivateIPs:
+    title: "App Private IP Address"
+    type: string
+    visible: true
+  Fn4Db_SrvPrivateIPs:
+    title: "DB Private IP Address"
+    type: string
     visible: true
   Fn4_deploy_id:
     title: "Deployment ID"

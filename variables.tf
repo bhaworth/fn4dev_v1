@@ -20,6 +20,7 @@ variable "dbsrv_count" { default = 1 }
 variable "dbsrv_boot_size" { default = 120 }
 variable "clone_db_backup" { default = true }
 variable "dbsrv_src_backup_vol_id" { default = "" }
+variable "nlb_port" { default = 5025 }
 variable "bastion_boot_size" { default = 50 }
 # variable "randomise_ad" { default = true }
 # variable "ad" { default = "" }

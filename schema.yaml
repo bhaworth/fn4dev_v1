@@ -29,6 +29,7 @@ variableGroups:
       - ${appsrv_shape}
       - ${appsrv_ocpus}
       - ${appsrv_ram}
+      - ${nlb_port}
   - title: "DB Server Config"
     variables:
       - ${dbsrv_count}
@@ -157,6 +158,13 @@ variables:
         - eq:
             - appsrv_shape
             - "VM.Standard.E3.Flex"
+  nlb_port:
+    type: integer
+    minimum: 1
+    maximum: 65535
+    required: true
+    title: "Load Balancer Port Number"
+    description: "The TCP port number for which the load balancer will forward traffic to the App Server"
   dbsrv_count:
     type: integer
     minimum: 1

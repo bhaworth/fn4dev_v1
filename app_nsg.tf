@@ -14,11 +14,11 @@ resource "oci_core_network_security_group_security_rule" "app-nsg-rule1" {
   source      = local.lb_nsg_id
   source_type = "NETWORK_SECURITY_GROUP"
   stateless   = false
-  description = "TCP/5025 (HTTPS) for Web Service from Load Balancer"
+  description = "TCP/${local.Fn4_lb_port} (HTTPS) for Web Service from Load Balancer"
   tcp_options {
     destination_port_range {
-      min = "5025"
-      max = "5025"
+      min = local.Fn4_lb_port
+      max = local.Fn4_lb_port
     }
   }
 }

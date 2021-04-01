@@ -12,7 +12,7 @@ resource "oci_network_load_balancer_network_load_balancer" "Fn4_netloadbalancer"
 
 locals {
   Fn4_lb_port      = var.nlb_port
-  Fn4_lb_public_ip = lookup(oci_load_balancer_load_balancer.Fn4_netloadbalancer.ip_address_details[0], "ip_address")
+  Fn4_lb_public_ip = lookup(oci_network_load_balancer_network_load_balancer.Fn4_netloadbalancer.ip_address_details[0], "ip_address")
   Fn4_lb_url       = var.create_dns ? "${local.Fn4_env_name}.oci.fn4dev.ml:${local.Fn4_lb_port}" : "${local.Fn4_lb_public_ip}:${local.Fn4_lb_port}"
 }
 output "Fn4_loadbalancer_url" {
@@ -22,7 +22,7 @@ output "Fn4_loadbalancer_public_ip" {
   value = local.Fn4_lb_public_ip
 }
 
-locals { Fn4_lb_id = oci_load_balancer_load_balancer.Fn4_loadbalancer.id }
+locals { Fn4_lb_id = oci_network_load_balancer_network_load_balancer.Fn4_loadbalancer.id }
 
 resource "oci_network_load_balancer_backend_set" "be_set_1" {
   health_checker {
